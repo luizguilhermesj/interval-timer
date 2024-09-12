@@ -2,10 +2,10 @@
 <script lang="ts">
     import { Clock, Interval, Timer } from '$lib'
     const intervals = [
-        new Interval(.01, '#84aff7'),
-        new Interval(.01, '#ff5959'),
-        new Interval(.01, '#fdd45c'),
-        new Interval(.01, '#7bc68e'),
+        new Interval(.02, '#84aff7'),
+        new Interval(.35, '#ff5959'),
+        new Interval(.05, '#fdd45c'),
+        new Interval(.03, '#7bc68e'),
     ]
 
     const timer = new Timer(intervals)

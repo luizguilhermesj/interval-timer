@@ -10,6 +10,7 @@ export default class Timer {
 
     private interval: number = $state(0);
     private currentIntervalIndex = 0
+    private tickRate = 100
 
     constructor(intervals: Interval[]) {
         this.currentInterval = intervals[this.currentIntervalIndex]
@@ -17,11 +18,11 @@ export default class Timer {
         let sum = this.convertNumToTime(intervals.reduce((p, c) => p + c.minutes, 0))
         this.minutes = Math.floor(sum / 60)
         this.seconds = Math.floor(sum % 60)
-        this.display = `${this.pad(this.minutes)}:${this.pad(this.seconds)}`
+        this.display = `${this.pad(this.minutes)}:${this.pad(Math.round(this.seconds))}`
     }
     start() {
         this.stop()
-        this.interval = setInterval(this.intervalFn.bind(this), 1000);
+        this.interval = setInterval(this.intervalFn.bind(this), this.tickRate);
     }
 
     stop() {
@@ -31,7 +32,8 @@ export default class Timer {
         this.elapsedSeconds = 0
     }
 
-    intervalFn() {
+    private intervalFn() {
+        const increment = this.tickRate / 1000
         if (this.seconds <= 0) {
             if (this.minutes <= 0 && this.interval) {
                 this.display = "Overtime!";
@@ -39,12 +41,14 @@ export default class Timer {
                 return;
             }
             this.seconds = 60;
-            this.minutes--;
+            this.minutes -= increment;
         }
-        this.seconds--;
-        this.elapsedSeconds++
 
-        this.display = `${this.pad(this.minutes)}:${this.pad(this.seconds)}`
+        this.seconds -= increment;
+        this.elapsedSeconds += increment
+        if (this.currentInterval) this.currentInterval.elapsedTime += increment
+
+        this.display = `${this.pad(this.minutes)}:${this.pad(Math.round(this.seconds))}`
         if (this.currentInterval && this.elapsedSeconds >= this.currentInterval.minutes * 60) {
             this.stop()
             this.currentInterval = this.intervals[++this.currentIntervalIndex]

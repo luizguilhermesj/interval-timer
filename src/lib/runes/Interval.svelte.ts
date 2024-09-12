@@ -1,6 +1,7 @@
 export default class Interval {
     minutes: number = $state(0)
     color: string = $state('black')
+    elapsedTime: number = $state(0)
 
     constructor(minutes: number, color: string) {
         this.minutes = minutes;
