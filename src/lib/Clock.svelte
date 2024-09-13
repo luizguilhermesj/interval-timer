@@ -1,24 +1,15 @@
 <script lang="ts">
-  import Interval from './runes/Interval.svelte'
 	import type Timer from './runes/Timer.svelte';
-  // blue #84aff7
-  // red #ff5959
-  // yellow #fdd45c
-  // green #7bc68e
 
   const { timer }: { timer: Timer } = $props();
 
-  let { currentInterval } = $derived(timer)
-
-  let totalSeconds = timer.minutes > 0 ? timer.seconds + (timer.minutes * 60) : timer.seconds
-
-  const sum = timer.intervals.reduce((p,c) => p + c.minutes, 0)
+  const totalMinutes = timer.intervals.reduce((p,c) => p + c.minutes, 0)
 
   interface Segments {
     [key:string]: {
       color: string;
       offset: number,
-      percentage: number
+      angle: number
     }
   }
 
@@ -28,42 +19,57 @@
     let offset = 0;
     for(let interval of timer.intervals) {
       const progress = interval.elapsedTime / (interval.minutes * 60)
-      const percentage = (interval.minutes/sum * 100) * progress
+      const angle = ((interval.minutes/totalMinutes * 100) * progress) * 360 / 100
       segments[interval.color] = {
         color: interval.color,
         offset,
-        percentage,
+        angle,
       }
-      offset += percentage * 360 / 100
+      offset += angle 
     }
   })
 
 </script>
 
 {#each Object.values(segments) as segment}
-  <div class="pie" style={`--percentage:${segment.percentage}%;--color:${segment.color};--offset:${segment.offset}deg`}></div>
+  <div class="conic-effect" style={`--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
 {/each}
 <span class="timer">{timer.display}</span>
+<span class="timer2">{timer.displayInterval}</span>
+
+
 <style>
-.pie {
+  /* CSS custom property */
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Conic Effect */
+.conic-effect {
+  height: 300px;
   width: 300px;
-  aspect-ratio: 1;
   position: absolute;
   top: 50%;
   left: 50%;
-  display: inline-grid;
-  place-content: center;
-  margin: 5px;
-  font-size: 25px;
-  font-weight: bold;
-  font-family: sans-serif;
-  transform: translate(-50%, -50%);
-}
-.pie:before {
-  content: "";
-  position: absolute;
   border-radius: 50%;
-  inset: 0;
-  background: conic-gradient(from var(--offset),var(--color) var(--percentage),#0000 0);
+  transform: translate(-50%, -50%);
+  --color: hsl(31, 94%, 61%);
+  background: conic-gradient(from var(--offset),
+    var(--color) var(--angle),
+    transparent calc(var(--angle))
+  );
+  transition: --angle 1s linear;
+}
+.timer {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 42px;
+  font-weight: 700;
 }
 </style>

@@ -4,13 +4,14 @@ export default class Timer {
     minutes: number = $state(0)
     seconds: number = $state(0)
     display: string = $state('')
+    displayInterval: string = $state('')
     elapsedSeconds: number = $state(0)
     intervals: Interval[] = $state([])
     currentInterval: Interval | null = $state(null)
 
     private interval: number = $state(0);
     private currentIntervalIndex = 0
-    private tickRate = 100
+    private tickRate = 1000
 
     constructor(intervals: Interval[]) {
         this.currentInterval = intervals[this.currentIntervalIndex]
@@ -19,6 +20,8 @@ export default class Timer {
         this.minutes = Math.floor(sum / 60)
         this.seconds = Math.floor(sum % 60)
         this.display = `${this.pad(this.minutes)}:${this.pad(Math.round(this.seconds))}`
+        let totalSecs = (this.currentInterval.minutes * 60) - this.currentInterval.elapsedTime
+        this.displayInterval = `${this.pad(Math.floor(totalSecs / 60))}:${this.pad(Math.floor(totalSecs % 60))}`
     }
     start() {
         this.stop()
@@ -49,6 +52,10 @@ export default class Timer {
         if (this.currentInterval) this.currentInterval.elapsedTime += increment
 
         this.display = `${this.pad(this.minutes)}:${this.pad(Math.round(this.seconds))}`
+        if (this.currentInterval) {
+            let totalSecs = (this.currentInterval.minutes * 60) - this.currentInterval.elapsedTime
+            this.displayInterval = `${this.pad(Math.floor(totalSecs / 60))}:${this.pad(Math.floor(totalSecs % 60))}`
+        }
         if (this.currentInterval && this.elapsedSeconds >= this.currentInterval.minutes * 60) {
             this.stop()
             this.currentInterval = this.intervals[++this.currentIntervalIndex]
