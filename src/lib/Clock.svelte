@@ -3,27 +3,33 @@
 
   const { timer }: { timer: Timer } = $props();
 
-  const totalMinutes = timer.intervals.reduce((p,c) => p + c.minutes, 0)
 
   interface Segments {
     [key:string]: {
       color: string;
       offset: number,
-      angle: number
+      angle: number,
+      speed: number,
     }
   }
 
   const segments: Segments = $state({})
 
 	$effect(() => {
+    const totalMinutes = timer.intervals.reduce((p,c) => p + c.minutes + c.seconds / 60, 0)
     let offset = 0;
     for(let interval of timer.intervals) {
-      const progress = interval.elapsedTime / (interval.minutes * 60)
-      const angle = ((interval.minutes/totalMinutes * 100) * progress) * 360 / 100
-      segments[interval.color] = {
+      const progress = interval.elapsedSeconds / interval.getTotalSeconds()
+      const angle = (((interval.getTotalMinutes()/totalMinutes * 100) * progress) * 360 / 100)
+      const speed = interval.running ? 1 : 0
+
+
+      
+      segments[interval.id] = {
         color: interval.color,
         offset,
         angle,
+        speed,
       }
       offset += angle 
     }
@@ -32,10 +38,9 @@
 </script>
 
 {#each Object.values(segments) as segment}
-  <div class="conic-effect" style={`--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
+  <div class="conic-effect" style={`--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
 {/each}
 <span class="timer">{timer.display}</span>
-<span class="timer2">{timer.displayInterval}</span>
 
 
 <style>
@@ -56,11 +61,12 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
   --color: hsl(31, 94%, 61%);
-  background: conic-gradient(from var(--offset),
+  background: conic-gradient(
+    from var(--offset),
     var(--color) var(--angle),
     transparent calc(var(--angle))
   );
-  transition: --angle 1s linear;
+  transition: --angle var(--speed) linear;
 }
 .timer {
   position: absolute;

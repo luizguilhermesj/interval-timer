@@ -1,20 +1,34 @@
 
 <script lang="ts">
     import { Clock, Interval, Timer } from '$lib'
-    const intervals = [
-        new Interval('#84aff7', 1, 10),
-        new Interval('#ff5959', .5),
-        new Interval('#fdd45c', .05),
-        new Interval('#7bc68e', .03),
-    ]
 
-    const timer = new Timer(intervals)
-    timer.start()
+    const timer = new Timer()    
+    timer.addInterval(new Interval('#84aff7', 0, 1))
+    timer.addInterval(new Interval('#ff5959', 0, 1))
+    timer.addInterval(new Interval('#fdd45c', 0, 1))
+    timer.addInterval(new Interval('#7bc68e', 0, 1))
+
+    const onclick = () => {
+      // timer.addInterval(new Interval(rndmColour(), 0, 1))
+      timer.startOrPause()
+    }
+
+    const reset = () => {
+      timer.reset()
+    }
+    function rndm( max, min = 0 ){ // [ min, max ]
+        return min + Math.floor( Math.random() *( max - min + 1 ));
+    }
+    function rndmColour() { // Hue Saturation Lightness
+        return `hsl(${rndm( 360 )},${rndm( 100 )}%,${rndm( 100 )}%)`;
+    }
 </script>
 
 
-<div style={`--currentInterval: ${timer.currentInterval?.color}`}>
+<div style={`--currentInterval: ${timer.color}`}>
     <Clock {timer}/>
+    <button class="play" {onclick}></button>
+    <button class="reset" onclick={reset}>reset</button>
     <div>
         <span></span>
     </div>
@@ -25,6 +39,11 @@
         width: 100px;
         height: 100px;
         background-color: var(--currentInterval);
+        }
+    .play:before {
+      padding: 10px;
+      content: "\23EF";
+      cursor: pointer;
     }
 </style>
 <!-- 
