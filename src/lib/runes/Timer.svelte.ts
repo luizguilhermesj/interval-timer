@@ -16,7 +16,7 @@ export default class Timer {
             let { minutes, seconds } = this.convertSecondsToTime(this.totalSeconds - this.elapsedSeconds)
             this.display = `${this.pad(minutes)}:${this.pad(Math.floor(seconds))}`
 
-            if (this.getCurrentInterval().isFinished()) {
+            if (this.getCurrentInterval()?.isFinished()) {
                 this.currentIntervalIndex++
                 const current = this.getCurrentInterval()
                 if (!current) return
@@ -30,6 +30,13 @@ export default class Timer {
         this.intervals.push(interval)
     }
 
+    removeInterval(interval: Interval) {
+        this.pause()
+        this.reset()
+        console.log(interval)
+        this.intervals = this.intervals.filter(el => interval != el)
+    }
+
     startOrPause() {
         if (this.getCurrentInterval().running) return this.pause()
         this.start()
@@ -41,7 +48,7 @@ export default class Timer {
     }
 
     pause() {
-        this.getCurrentInterval().pause()
+        this.getCurrentInterval()?.pause()
     }
 
     reset() {

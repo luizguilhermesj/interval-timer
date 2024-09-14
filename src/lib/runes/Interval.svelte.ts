@@ -53,8 +53,11 @@ export default class Interval {
     }
 
     private normalizeTime(minutes: number, seconds:number) {
+        console.log(minutes, seconds)
         this.minutes = Math.floor(minutes + seconds / 60)
-        this.seconds = this.minutes % 60 + (seconds % 60)
+        this.seconds = minutes * 60 % 60 + (seconds % 60)
+
+        console.log(minutes, this.minutes, seconds, this.seconds)
     }
 
     private pad(el: number): string {
@@ -63,9 +66,8 @@ export default class Interval {
 
     private intervalFn() {
         const increment = this.tickRate / 1000
-        console.log(this.elapsedSeconds)
         if (this.elapsedSeconds >= this.getTotalSeconds()) {
-            this.display = "Overtime!";
+            this.display = "Finished!";
             this.pause()
             return;
         }
@@ -73,7 +75,6 @@ export default class Interval {
         this.elapsedSeconds += increment
         const {minutes, seconds} = this.convertSecondsToTime(this.getTotalSeconds() - this.elapsedSeconds)
         this.display = `${this.pad(minutes)}:${this.pad(seconds)}`
-        console.log(minutes, seconds)
     }
 
     private convertSecondsToTime(number: number): { minutes: number, seconds: number } {
