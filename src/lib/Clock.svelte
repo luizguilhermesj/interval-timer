@@ -2,8 +2,6 @@
 	import type Timer from './runes/Timer.svelte';
 
   const { timer }: { timer: Timer } = $props();
-
-
   interface Segments {
     [key:string]: {
       color: string;
@@ -15,27 +13,25 @@
     }
   }
 
-  const segments: Segments = $state({})
+  let segments: Segments = $state({})
 
   const getPosition = (angle: number) : {x:number, y:number} => {
     let deg = (360 + 90 - angle ) % 360
     const rad = deg * (Math.PI/180)
-    const sin = Math.sin(rad)
-    const cos = Math.cos(rad)
-    let x = 50 + cos
-    let y = 50 - sin
-
-    return {x, y}
+    return {
+      x: 50 + Math.cos(rad),
+      y: 50 - Math.sin(rad),
+    }
   }
 
 	$effect(() => {
-    const totalMinutes = timer.intervals.reduce((p,c) => p + c.minutes + c.seconds / 60, 0)
     let offset = 0;
     for(let interval of timer.intervals) {
       const progress = interval.elapsedSeconds / interval.getTotalSeconds()
-      const angle = (((interval.getTotalMinutes()/totalMinutes * 100) * progress) * 360 / 100)
-      const speed = interval.running ? 1 : 0
-      const angleLength = (interval.getTotalMinutes()/totalMinutes * 360);
+      const angle = (((interval.getTotalSeconds() / timer.totalSeconds * 100) * progress) * 360 / 100)
+      // console.log('angle', angle, interval.getTotalSeconds(), timer.totalSeconds, progress)
+      const speed = interval.running ? interval.tickRate / 1000 : 0
+      const angleLength = (interval.getTotalSeconds()/timer.totalSeconds * 360);
       const {x:px, y:py} = getPosition(angleLength + offset - (angleLength / 2))
       
       segments[interval.id] = {
@@ -52,10 +48,12 @@
 
 </script>
 
-{#each Object.values(segments) as segment}
-  <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
-{/each}
-<span class="timer">{timer.display}</span>
+<div class='container'>
+  {#each Object.values(segments) as segment}
+    <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
+  {/each}
+  <span class="timer">{timer.display}</span>
+</div>
 
 
 <style>
@@ -65,6 +63,13 @@
   initial-value: 0deg;
 }
 
+.container {
+  position: relative;
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
 .conic-effect {
   height: 300px;
   width: 300px;

@@ -5,9 +5,9 @@ export default class Timer {
     display: string = $state('')
     elapsedSeconds: number = $state(0)
     intervals: Interval[] = $state([])
+    totalSeconds: number = $state(0)
 
     private currentIntervalIndex: number = 0
-    private totalSeconds: number = $state(0)
 
     constructor() {
         $effect(() => {
@@ -26,14 +26,14 @@ export default class Timer {
         })
     }
 
-    addInterval(interval : Interval) {
+    addInterval(interval: Interval) {
+        this.reset()
         this.intervals.push(interval)
     }
 
     removeInterval(interval: Interval) {
         this.pause()
         this.reset()
-        console.log(interval)
         this.intervals = this.intervals.filter(el => interval != el)
     }
 
@@ -53,8 +53,10 @@ export default class Timer {
 
     reset() {
         this.currentIntervalIndex = 0
-        this.intervals.map(el => el.reset())
-        if (this.getCurrentInterval().running) return this.start()
+        for (const interval of this.intervals) {
+            interval.pause()
+            interval.reset()
+        }
     }
 
     getCurrentInterval() {

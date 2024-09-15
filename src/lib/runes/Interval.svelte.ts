@@ -7,8 +7,8 @@ export default class Interval {
     display: string = $state('')
     running: boolean = $state(false)
     id: number
+    tickRate: number = 1000
 
-    private tickRate: number = 1000
     private interval: number = 0
     private totalSeconds: number = 0
 
@@ -18,18 +18,14 @@ export default class Interval {
         this.id = parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(10).toString().replace(".", ""))
 
         this.normalizeTime(minutes, seconds)
-
-        this.display = `${this.pad(this.minutes)}:${this.pad(Math.round(this.seconds))}`
+        
+        this.updateDisplay(this.minutes, this.seconds)
     }
 
     getTotalSeconds() {
         if (this.totalSeconds) return this.totalSeconds
         this.totalSeconds = this.minutes * 60 + this.seconds
         return this.totalSeconds
-    }
-
-    getTotalMinutes() {
-        return this.minutes + this.seconds / 60
     }
 
     start() {
@@ -46,18 +42,20 @@ export default class Interval {
     reset() {
         this.pause()
         this.elapsedSeconds = 0
+        this.updateDisplay(this.minutes, this.seconds)
     }
 
     isFinished() {
         return this.elapsedSeconds >= this.getTotalSeconds()
     }
 
+    private updateDisplay(minutes:number, seconds:number) {
+        this.display = `${this.pad(minutes)}:${this.pad(Math.round(seconds))}`
+    }
+
     private normalizeTime(minutes: number, seconds:number) {
-        console.log(minutes, seconds)
         this.minutes = Math.floor(minutes + seconds / 60)
         this.seconds = minutes * 60 % 60 + (seconds % 60)
-
-        console.log(minutes, this.minutes, seconds, this.seconds)
     }
 
     private pad(el: number): string {
@@ -74,7 +72,8 @@ export default class Interval {
 
         this.elapsedSeconds += increment
         const {minutes, seconds} = this.convertSecondsToTime(this.getTotalSeconds() - this.elapsedSeconds)
-        this.display = `${this.pad(minutes)}:${this.pad(seconds)}`
+        // console.log(this.getTotalSeconds() - this.elapsedSeconds, this.elapsedSeconds)
+        this.updateDisplay(minutes, seconds)
     }
 
     private convertSecondsToTime(number: number): { minutes: number, seconds: number } {
