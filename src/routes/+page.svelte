@@ -63,6 +63,8 @@
 <style>
   * {
     font-family:'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 18px;
   }
 
   .main {
@@ -80,29 +82,18 @@
   }
 
   .form input {
-    width: 36px;
+    width: 50px;
+    text-align: center;
     border: 0;
     outline: 0;
-    color: rgb(60, 66, 87);
-    background-color: rgb(255, 255, 255);
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
     border-radius: 4px;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
+    font-size: 18px;
     padding: 4px 8px;
-    min-height: 28px;
-    vertical-align: middle;
-    transition: background-color .24s,box-shadow .24s;
-    transition-property: background-color, box-shadow;
-    transition-duration: 0.24s, 0.24s;
-    transition-timing-function: ease, ease;
-    transition-delay: 0s, 0s;
   }
 
   .form input:focus{
-  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-    /* box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(58 151 212 / 36%) 0px 0px 0px 4px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(60 66 87 / 16%) 0px 0px 0px 1px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px 0px; */
+    box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
   }           
                 
 </style>

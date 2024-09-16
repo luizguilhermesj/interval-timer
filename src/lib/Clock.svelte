@@ -62,7 +62,10 @@
   {#each segmentsToDisplay as segment}
     <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
   {/each}
-  <span class="timer">{timer.display}</span>
+  <div class="timer">
+    <div class="top">{timer.display}</div>
+    <span class="sub">.{Math.round(timer.elapsedSeconds % 1 * 1000).toString().padStart(3, "0")}</span>
+  </div>
 </div>
 
 
@@ -99,16 +102,27 @@
 }
 .timer {
   position: absolute;
-  display: block;
+  display: flex;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: black;
-  font-size: 42px;
-  font-weight: 700;
   background-color: rgba(255,255,255,.8);
   border-radius: 15px;
   padding: 0px 8px;
+  padding-bottom: 4px;
   font-family: 'Courier New', Courier, monospace;
+}
+.timer .top {
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.timer .sub {
+  position: absolute;
+  bottom: 4px;
+  right: 10px;
+  font-size: 10px;
+  padding: 0;
 }
 </style>

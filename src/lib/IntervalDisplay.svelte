@@ -23,16 +23,16 @@
         class="interval"
         class:finishing-long={
           interval.running
-          && interval.elapsedSeconds > interval.seconds * 0.8
-          && interval.elapsedSeconds <= interval.seconds * 0.9
-          && interval.seconds - interval.elapsedSeconds < 20
+          && interval.elapsedSeconds > interval.getTotalSeconds() * 0.8
+          && interval.elapsedSeconds <= interval.getTotalSeconds() * 0.9
+          && interval.getTotalSeconds() - interval.elapsedSeconds < 20
         }
         class:finishing={
           interval.running
-          && interval.elapsedSeconds > interval.seconds * 0.9
-          && interval.seconds - interval.elapsedSeconds < 5
+          && interval.elapsedSeconds > interval.getTotalSeconds() * 0.9
+          && interval.getTotalSeconds() - interval.elapsedSeconds < 5
         }
-        class:finished={interval.elapsedSeconds >= interval.seconds}
+        class:finished={interval.elapsedSeconds >= interval.getTotalSeconds()}
         animate:flip={{duration:flipDurationMs}}
         >
           <div style={`--currentInterval: ${interval.color}`}><span></span></div>
@@ -49,6 +49,7 @@
     width: 20px;
     height: 20px;
     background-color: var(--currentInterval);
+    border-radius: 50%;
   }
   .intervals {
     width: 300px;
@@ -68,7 +69,7 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   }
   .interval.finished {
-    background-color: #ffd7d7;
+    background-color: #daffd7;
   }
 
   .interval.finishing,
