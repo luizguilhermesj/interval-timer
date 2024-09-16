@@ -66,7 +66,7 @@ export default class Interval {
 
     private updateTime() {
         if (this.elapsedSeconds >= this.getTotalSeconds()) {
-            // this.display = "Finished!";
+            this.display = "Finished!";
             this.pause()
             return;
         }

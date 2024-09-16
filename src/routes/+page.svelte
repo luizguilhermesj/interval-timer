@@ -22,10 +22,11 @@
   timer.addInterval(new Interval(getColor(), 0, 1))
 
   timer.intervalFinished(() => {
+    if (!audio.paused) return
     audio.play()
     setTimeout(() => {
       audio.pause()
-      audio.currentTime
+      audio.currentTime = 0
     }, 280)
   })
 
