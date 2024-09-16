@@ -7,8 +7,9 @@ export default class Interval {
     display: string = $state('')
     running: boolean = $state(false)
     id: number
-    tickRate: number = 1000
+    tickRate: number = 100
 
+    private timeStarted = 0;
     private interval: number = 0
     private totalSeconds: number = 0
 
@@ -29,9 +30,10 @@ export default class Interval {
     }
 
     start() {
+        this.timeStarted = Date.now()
         this.pause()
         this.running = true
-        this.interval = setInterval(this.intervalFn.bind(this), this.tickRate);
+        this.interval = setInterval(this.updateTime.bind(this), this.tickRate);
     }
 
     pause() {
@@ -62,21 +64,21 @@ export default class Interval {
         return el.toString().padStart(2, "0")
     }
 
-    private intervalFn() {
-        const increment = this.tickRate / 1000
+    private updateTime() {
         if (this.elapsedSeconds >= this.getTotalSeconds()) {
-            this.display = "Finished!";
+            // this.display = "Finished!";
             this.pause()
             return;
         }
 
-        this.elapsedSeconds += increment
+        this.elapsedSeconds = (Date.now() - this.timeStarted) / 1000
         const {minutes, seconds} = this.convertSecondsToTime(this.getTotalSeconds() - this.elapsedSeconds)
         // console.log(this.getTotalSeconds() - this.elapsedSeconds, this.elapsedSeconds)
         this.updateDisplay(minutes, seconds)
     }
 
-    private convertSecondsToTime(number: number): { minutes: number, seconds: number } {
+    convertSecondsToTime(number: number): { minutes: number, seconds: number } {
+        if (number < 0) return { minutes: 0, seconds: 0 }
         const minutes = Math.floor(number / 60)
         const seconds = number % 60;
         return {minutes, seconds};

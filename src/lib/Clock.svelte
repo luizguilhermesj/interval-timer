@@ -2,18 +2,19 @@
 	import type Timer from './runes/Timer.svelte';
 
   const { timer }: { timer: Timer } = $props();
-  interface Segments {
-    [key:string]: {
-      color: string;
-      offset: number,
-      angle: number,
-      speed: number,
-      px: number,
-      py: number,
-    }
+  
+  
+  interface Segment {
+    color: string;
+    offset: number,
+    angle: number,
+    speed: number,
+    px: number,
+    py: number,
   }
 
-  let segments: Segments = $state({})
+  let segments: Map<number, Segment> = $state(new Map<number, Segment>())
+  let segmentsToDisplay: Segment[] = $state([])
 
   const getPosition = (angle: number) : {x:number, y:number} => {
     let deg = (360 + 90 - angle ) % 360
@@ -25,6 +26,10 @@
   }
 
 	$effect(() => {
+    if (segments.size > timer.intervals.length) {
+      segments.clear()
+    }
+
     let offset = 0;
     for(let interval of timer.intervals) {
       const progress = interval.elapsedSeconds / interval.getTotalSeconds()
@@ -33,23 +38,28 @@
       const speed = interval.running ? interval.tickRate / 1000 : 0
       const angleLength = (interval.getTotalSeconds()/timer.totalSeconds * 360);
       const {x:px, y:py} = getPosition(angleLength + offset - (angleLength / 2))
-      
-      segments[interval.id] = {
+
+      segments.set(interval.id, {
         color: interval.color,
         offset,
         angle,
         speed,
         px,
         py,
-      }
+      })
       offset += angle 
     }
+
+    segmentsToDisplay = [...segments.entries()].reduce<Segment[]>((p, [k, s]) => {
+      p.push(s)
+      return p
+    }, [])
   })
 
 </script>
 
 <div class='container'>
-  {#each Object.values(segments) as segment}
+  {#each segmentsToDisplay as segment}
     <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
   {/each}
   <span class="timer">{timer.display}</span>
