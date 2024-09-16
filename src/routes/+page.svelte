@@ -36,11 +36,11 @@
 </script>
 <div class="main">
   <div>
-    <div class="form">
+    <div class="form inputs">
       <Button onclick={timer.startOrPause.bind(timer)}>start/stop</Button>
       <Button onclick={timer.reset.bind(timer)}>reset</Button>
     </div>
-    <div class="form">
+    <div class="form list">
       <input onkeypress={handleKeyPress} type="number" bind:value={minutes} min=0 max=60 />
       <input onkeypress={handleKeyPress} type="number" bind:value={seconds} min=0 max=60 />
       <Button style={'margin-left: 20px'} onclick={addInterval}>add</Button>
@@ -56,13 +56,18 @@
 
   .main {
     display: flex;
+    flex-wrap: wrap-reverse;
     width: 100%;
     justify-content: space-around;
     margin-top: 60px;
   }
+
+  .inputs {
+    
+  }
   
   .form {
-    margin: 20px;
+    margin: 20px auto;
     display: flex;
   }
 

@@ -102,10 +102,12 @@
   }
   .intervals {
     width: 300px;
+    padding: 0;
   }
   .interval.dragging {
     opacity: 0;
   }
+
   .interval {
     background-color: white;
     cursor: grab;
