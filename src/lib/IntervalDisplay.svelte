@@ -45,7 +45,7 @@
 <ul class="intervals"
 
   >
-  {#if mouseYCoordinate && draggingItem}
+  {#if mouseYCoordinate && draggingItem && draggingItemId}
     <li class="interval ghost" style="top: {mouseYCoordinate + (distanceTopGrabbedVsPointer || 0)}px;">
       <div style={`--currentInterval: ${draggingItem.color}`}><span></span></div>
       <div>{draggingItem.display}</div>
