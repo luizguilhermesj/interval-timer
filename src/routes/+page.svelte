@@ -1,6 +1,7 @@
 
 <script lang="ts">
   import { Clock, Interval, Timer, Button, IntervalDisplay } from '$lib'
+  import Test from '../lib/Test.svelte'
 
   let index = 0;
   const getColor = () => {
@@ -33,7 +34,6 @@
   }
 
 </script>
-
 <div class="main">
   <div>
     <div class="form">
