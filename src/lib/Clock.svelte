@@ -32,11 +32,11 @@
 
     let offset = 0;
     for(let interval of timer.intervals) {
-      const progress = interval.elapsedSeconds / interval.getTotalSeconds()
-      const angle = (((interval.getTotalSeconds() / timer.totalSeconds * 100) * progress) * 360 / 100)
-      // console.log('angle', angle, interval.getTotalSeconds(), timer.totalSeconds, progress)
+      const progress = interval.elapsedSeconds / interval.totalSeconds
+      const angle = (((interval.totalSeconds / timer.totalSeconds * 100) * progress) * 360 / 100)
+      // console.log('angle', angle, interval.totalSeconds, timer.totalSeconds, progress)
       const speed = interval.running ? interval.tickRate / 1000 : 0
-      const angleLength = (interval.getTotalSeconds()/timer.totalSeconds * 360);
+      const angleLength = (interval.totalSeconds/timer.totalSeconds * 360);
       const {x:px, y:py} = getPosition(angleLength + offset - (angleLength / 2))
 
       segments.set(interval.id, {

@@ -4,6 +4,7 @@ export default class Interval {
     color: string = $state('black')
 
     elapsedSeconds: number = $state(0)
+    totalSeconds: number = $state(0)
     display: string = $state('')
     running: boolean = $state(false)
     id: number
@@ -11,7 +12,6 @@ export default class Interval {
 
     private timeStarted = 0;
     private interval: number = 0
-    private totalSeconds: number = 0
 
     constructor(color: string, minutes: number = 0, seconds: number = 0) {
         this.color = color
@@ -19,14 +19,9 @@ export default class Interval {
         this.id = parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(10).toString().replace(".", ""))
 
         this.normalizeTime(minutes, seconds)
-        
-        this.updateDisplay(this.minutes, this.seconds)
-    }
-
-    getTotalSeconds() {
-        if (this.totalSeconds) return this.totalSeconds
         this.totalSeconds = this.minutes * 60 + this.seconds
-        return this.totalSeconds
+
+        this.updateDisplay(this.minutes, this.seconds)
     }
 
     start() {
@@ -48,7 +43,7 @@ export default class Interval {
     }
 
     isFinished() {
-        return this.elapsedSeconds >= this.getTotalSeconds()
+        return this.elapsedSeconds >= this.totalSeconds
     }
 
     private updateDisplay(minutes:number, seconds:number) {
@@ -65,14 +60,14 @@ export default class Interval {
     }
 
     private updateTime() {
-        if (this.elapsedSeconds >= this.getTotalSeconds()) {
+        if (this.elapsedSeconds >= this.totalSeconds) {
             this.display = "Finished!";
             this.pause()
             return;
         }
 
-        this.elapsedSeconds = Math.min((Date.now() - this.timeStarted) / 1000, this.getTotalSeconds())
-        const {minutes, seconds} = this.convertSecondsToTime(this.getTotalSeconds() - this.elapsedSeconds)
+        this.elapsedSeconds = Math.min((Date.now() - this.timeStarted) / 1000, this.totalSeconds)
+        const {minutes, seconds} = this.convertSecondsToTime(this.totalSeconds - this.elapsedSeconds)
         this.updateDisplay(minutes, seconds)
     }
 

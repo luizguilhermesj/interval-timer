@@ -12,6 +12,7 @@ export default class Timer {
 
     constructor() {
         $effect(() => {
+            if (!this.intervals.every(this.isInterval)) return
             this.updateTime()
 
             if (this.getCurrentInterval()?.isFinished()) {
@@ -23,6 +24,10 @@ export default class Timer {
                 this.color = current.color
             }
         })
+    }
+
+    isInterval(interval: Interval): interval is Interval {
+        return (interval as Interval).isFinished !== undefined;
     }
 
     intervalFinished(callback: Function) {
@@ -72,9 +77,10 @@ export default class Timer {
     }
 
     private updateTime() {
-        this.totalSeconds = this.intervals.reduce((p, c) => p + c.getTotalSeconds(), 0)
+        this.totalSeconds = this.intervals.reduce((p, c) => p + c.totalSeconds, 0)
         this.elapsedSeconds = this.intervals.reduce((p, c) => p + c.elapsedSeconds, 0)
 
+        if (!this.getCurrentInterval()) return
         let { minutes, seconds } = this.getCurrentInterval().convertSecondsToTime(this.totalSeconds - this.elapsedSeconds)
         this.display = `${this.pad(minutes)}:${this.pad(Math.floor(seconds))}`
     }

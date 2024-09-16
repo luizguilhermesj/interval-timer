@@ -18,21 +18,21 @@
 </script>
 
 <ul class="intervals" use:dndzone={{dropTargetStyle: {}, items: timer.intervals, flipDurationMs, dragDisabled}} onconsider={handleSort} onfinalize={handleSort}>
-  {#each Object.values(timer.intervals) as interval, index (interval)}
+  {#each Object.values(timer.intervals) as interval (interval.id)}
       <li 
         class="interval"
         class:finishing-long={
           interval.running
-          && interval.elapsedSeconds > interval.getTotalSeconds() * 0.8
-          && interval.elapsedSeconds <= interval.getTotalSeconds() * 0.9
-          && interval.getTotalSeconds() - interval.elapsedSeconds < 20
+          && interval.elapsedSeconds > interval.totalSeconds * 0.8
+          && interval.elapsedSeconds <= interval.totalSeconds * 0.9
+          && interval.totalSeconds - interval.elapsedSeconds < 20
         }
         class:finishing={
           interval.running
-          && interval.elapsedSeconds > interval.getTotalSeconds() * 0.9
-          && interval.getTotalSeconds() - interval.elapsedSeconds < 5
+          && interval.elapsedSeconds > interval.totalSeconds * 0.9
+          && interval.totalSeconds - interval.elapsedSeconds < 5
         }
-        class:finished={interval.elapsedSeconds >= interval.getTotalSeconds()}
+        class:finished={interval.elapsedSeconds >= interval.totalSeconds}
         animate:flip={{duration:flipDurationMs}}
         >
           <div style={`--currentInterval: ${interval.color}`}><span></span></div>
