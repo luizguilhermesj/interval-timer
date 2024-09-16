@@ -2,6 +2,7 @@
 <script lang="ts">
   import { Clock, Interval, Timer, Button, IntervalDisplay } from '$lib'
 
+  let audio: HTMLAudioElement;
 
   let index = 0;
   const getColor = () => {
@@ -16,9 +17,17 @@
     return color
   }
 
-  const timer = new Timer()    
+  const timer = new Timer()
   timer.addInterval(new Interval(getColor(), 0, 1))
   timer.addInterval(new Interval(getColor(), 0, 1))
+
+  timer.intervalFinished(() => {
+    audio.play()
+    setTimeout(() => {
+      audio.pause()
+      audio.currentTime
+    }, 280)
+  })
 
   let minutes = 0;
   let seconds = 0;
@@ -49,6 +58,7 @@
   </div>
   <Clock {timer} />
 </div>
+<audio src="https://freesound.org/data/previews/536/536420_4921277-lq.mp3" bind:this={audio}></audio>
 <style>
   * {
     font-family:'Courier New', Courier, monospace;
@@ -56,14 +66,11 @@
 
   .main {
     display: flex;
+    align-items: flex-end;
     flex-wrap: wrap-reverse;
     width: 100%;
     justify-content: space-around;
     margin-top: 60px;
-  }
-
-  .inputs {
-    
   }
   
   .form {

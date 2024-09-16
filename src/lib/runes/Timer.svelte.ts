@@ -8,12 +8,14 @@ export default class Timer {
     totalSeconds: number = $state(0)
 
     private currentIntervalIndex: number = 0
+    private callbacks: Function[] = []
 
     constructor() {
         $effect(() => {
             this.updateTime()
 
             if (this.getCurrentInterval()?.isFinished()) {
+                this.triggerIntervalFinished(this.getCurrentInterval())
                 this.currentIntervalIndex++
                 const current = this.getCurrentInterval()
                 if (!current) return 
@@ -21,6 +23,14 @@ export default class Timer {
                 this.color = current.color
             }
         })
+    }
+
+    intervalFinished(callback: Function) {
+        this.callbacks.push(callback)
+    }
+
+    triggerIntervalFinished(interval: Interval) {
+        this.callbacks.map(callback => callback(interval));
     }
 
     addInterval(interval: Interval) {

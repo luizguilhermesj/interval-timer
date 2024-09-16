@@ -71,7 +71,7 @@ export default class Interval {
             return;
         }
 
-        this.elapsedSeconds = (Date.now() - this.timeStarted) / 1000
+        this.elapsedSeconds = Math.min((Date.now() - this.timeStarted) / 1000, this.seconds)
         const {minutes, seconds} = this.convertSecondsToTime(this.getTotalSeconds() - this.elapsedSeconds)
         // console.log(this.getTotalSeconds() - this.elapsedSeconds, this.elapsedSeconds)
         this.updateDisplay(minutes, seconds)
