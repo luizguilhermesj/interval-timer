@@ -1,4 +1,14 @@
-import type Interval from "./Interval.svelte";
+import Interval from "./Interval.svelte";
+import { browser } from "$app/environment"
+
+class IntervalStoreItem {
+    constructor(
+        public color: string,
+        public minutes: number,
+        public seconds: number,
+        public id: number,
+    ) { }
+}
 
 export default class Timer {
     color: string = $state('')
@@ -9,10 +19,27 @@ export default class Timer {
 
     private currentIntervalIndex: number = 0
     private callbacks: Function[] = []
+    private store: IntervalStoreItem[] = []
 
-    constructor() {
+    constructor(defaultIntervals: Interval[] = []) {
+        if (browser) {
+            this.store = JSON.parse(localStorage.getItem('intervals') || '[]')
+            if (this.store.length) {
+                for (let value of this.store) {
+                    this.addInterval(new Interval(value.color, value.minutes, value.seconds, value.id))
+                }
+            } else {
+                defaultIntervals.map(this.addInterval.bind(this))
+                this.syncLocalStorage()
+            }
+        }
+
         $effect(() => {
-            if (!this.intervals.every(this.isInterval)) return
+            this.intervals;
+            this.syncLocalStorage()
+        })
+
+        $effect(() => {
             this.updateTime()
 
             if (this.getCurrentInterval()?.isFinished()) {
@@ -74,6 +101,18 @@ export default class Timer {
 
     getCurrentInterval() {
         return this.intervals[this.currentIntervalIndex]
+    }
+
+
+    private syncLocalStorage() {
+        if (!browser) return
+
+        this.store = []
+        for (let interval of this.intervals) {
+            this.store.push(new IntervalStoreItem(interval.color, interval.minutes, interval.seconds, interval.id))
+        }
+
+        localStorage.setItem('intervals', JSON.stringify(this.store))
     }
 
     private updateTime() {

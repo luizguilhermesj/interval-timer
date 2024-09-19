@@ -63,7 +63,7 @@
     <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
   {/each}
   <div class="timer">
-    <div class="top">{timer.display}</div>
+    <div class="top">{timer.display || "00:00"}</div>
     <span class="sub">.{Math.round(timer.elapsedSeconds % 1 * 1000).toString().padStart(3, "0")}</span>
   </div>
 </div>

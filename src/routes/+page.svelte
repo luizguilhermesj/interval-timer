@@ -17,9 +17,10 @@
     return color
   }
 
-  const timer = new Timer()
-  timer.addInterval(new Interval(getColor(), 0, 1))
-  timer.addInterval(new Interval(getColor(), 0, 1))
+  const timer = new Timer([
+    new Interval(getColor(), 0, 1),
+    new Interval(getColor(), 0, 1),
+  ])
 
   timer.intervalFinished(() => {
     if (!audio.paused) return
@@ -32,17 +33,15 @@
 
   let minutes = 0;
   let seconds = 0;
-
   const addInterval = () => {
-    if (minutes || seconds)
-    timer.addInterval(new Interval(getColor(), minutes, seconds))
+    if (!minutes && !seconds) return
+    timer.addInterval(new Interval(getColor(), minutes, seconds));
   }
 
   const handleKeyPress = (e:KeyboardEvent) => {
 		if (e.key != 'Enter') return 
     addInterval()
   }
-
 </script>
 <div class="main">
   <div>

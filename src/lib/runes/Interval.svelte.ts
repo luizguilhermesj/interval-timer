@@ -1,7 +1,7 @@
 export default class Interval {
-    minutes: number = $state(0)
-    seconds: number = $state(0)
-    color: string = $state('black')
+    minutes: number = $state<number>(0)
+    seconds: number = $state<number>(0)
+    color: string = $state<string>('black')
 
     elapsedSeconds: number = $state(0)
     totalSeconds: number = $state(0)
@@ -13,10 +13,10 @@ export default class Interval {
     private timeStarted = 0;
     private interval: number = 0
 
-    constructor(color: string, minutes: number = 0, seconds: number = 0) {
+    constructor(color: string, minutes: number = 0, seconds: number = 0, id: number|null = null) {
         this.color = color
         
-        this.id = parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(10).toString().replace(".", ""))
+        this.id = id || parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(10).toString().replace(".", ""))
 
         this.normalizeTime(minutes, seconds)
         this.totalSeconds = this.minutes * 60 + this.seconds
@@ -77,4 +77,4 @@ export default class Interval {
         const seconds = number % 60;
         return {minutes, seconds};
     }
-}
+};
