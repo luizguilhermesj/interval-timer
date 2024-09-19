@@ -1,6 +1,6 @@
 
 <script lang="ts">
-  import { Clock, Interval, Timer, Button, IntervalDisplay } from '$lib'
+  import { Clock, Interval, Timer, Button, IntervalDisplay, Analytics } from '$lib'
 
   let audio: HTMLAudioElement;
 
@@ -59,6 +59,8 @@
   <Clock {timer} />
 </div>
 <audio src="https://freesound.org/data/previews/536/536420_4921277-lq.mp3" bind:this={audio}></audio>
+
+<Analytics />
 <style>
   * {
     font-family:'Courier New', Courier, monospace;
