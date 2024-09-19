@@ -40,6 +40,7 @@ export default class Timer {
         })
 
         $effect(() => {
+            if (!this.intervals.every(this.isInterval)) return
             this.updateTime()
 
             if (this.getCurrentInterval()?.isFinished()) {

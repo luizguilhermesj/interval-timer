@@ -3,17 +3,19 @@
   import { Timer, Button, Interval } from '$lib'
 	import {dndzone} from 'svelte-dnd-action';
 	import {flip} from 'svelte/animate';
+	import ColorPicker from 'svelte-awesome-color-picker';
   
 	const flipDurationMs = 200;
   const { timer }: { timer: Timer } = $props();
-  let dragDisabled = $state(false);
+  let dragDisabled = $state(true);
+  let isOpen: {[key:number]:boolean} = $state({});
 
 	function handleSort(e) {
 		timer.intervals = e.detail.items;
 	} 
 
   $effect(() => {
-    dragDisabled = timer.getCurrentInterval()?.running
+    dragDisabled = timer.getCurrentInterval()?.running || Object.values(isOpen).some(el => el)
   })
 </script>
 
@@ -35,7 +37,21 @@
         class:finished={interval.elapsedSeconds >= interval.totalSeconds}
         animate:flip={{duration:flipDurationMs}}
         >
-          <div style={`--currentInterval: ${interval.color}`}><span></span></div>
+          <button class="color-picker" onclick={() => {
+              isOpen[interval.id] = true
+            }}>
+            <ColorPicker
+              label=''
+              bind:isOpen={isOpen[interval.id]}
+              hex={interval.color}
+              on:input={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                e.stopImmediatePropagation()
+                interval.color = e.detail.hex || interval.color;
+              }}
+            />
+          </button>
           <div>{interval.display}</div>
           <Button onclick={() => timer.removeInterval(interval)}>remove</Button>
       </li>
@@ -44,13 +60,11 @@
 
 <style>
   li { display: block;}
-  span {
-    display: block;
-    width: 20px;
-    height: 20px;
-    background-color: var(--currentInterval);
-    border-radius: 50%;
+  .color-picker {
+    border: none;
+    background: none;
   }
+
   .intervals {
     width: 300px;
     padding: 0;
