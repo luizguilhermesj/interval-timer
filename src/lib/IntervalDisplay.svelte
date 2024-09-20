@@ -10,7 +10,7 @@
   let dragDisabled = $state(true);
   let isOpen: {[key:number]:boolean} = $state({});
 
-	function handleSort(e) {
+	function handleSort(e: {detail: { items: Interval[] }}) {
 		timer.intervals = e.detail.items;
 	} 
 
