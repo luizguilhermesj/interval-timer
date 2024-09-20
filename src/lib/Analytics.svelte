@@ -1,8 +1,8 @@
 <script lang="ts">
     import { page } from '$app/stores'
     import { browser } from '$app/environment';
-    const ID = 'G-6VKJKRM18Y';
-  
+    const ID = 'G-6VKJKRM18Y'
+
     $effect(() => {
         if (!browser || gtag == undefined) return
         gtag('config', ID, {
@@ -17,7 +17,7 @@
         async
         src={`https://www.googletagmanager.com/gtag/js?id=${ID}`}>
     </script>
-    <script>
+    {@html `<script>
         window.dataLayer = window.dataLayer || []
 
         function gtag() {
@@ -25,7 +25,7 @@
         }
 
         gtag('js', new Date())
-        gtag('config', ID)
-    </script>
+        gtag('config', '${ID}')
+    </script>`}
 </svelte:head>
   
