@@ -178,16 +178,4 @@
 		opacity: 0.7;
 		transform: scale(0.45) rotate(35deg);
 	}
-
-	:root {
-		--bg-color: #eeeeee;
-		--text-color: #000000;
-		--bg-shadow-1: rgba(45, 35, 66, 0.4);
-	}
-
-	:global(html.dark-mode) {
-		--bg-color: #1d3040;
-		--text-color: #bfc2c7;
-		--bg-shadow-1: rgba(45, 35, 66, 0.4);
-	}
 </style>

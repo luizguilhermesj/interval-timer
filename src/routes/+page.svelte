@@ -77,6 +77,23 @@
 
 <Analytics />
 <style>
+	:root {
+		--bg-color: #eeeeee;
+		--bg-secondary: white;
+    --bg-terciary: #fffeb1;
+    --bg-success: #daffd7;
+		--text-color: #000000;
+		--bg-shadow-1: rgba(45, 35, 66, 0.4);
+	}
+
+	:global(html.dark-mode) {
+		--bg-color: #1d3040;
+		--bg-secondary: #1f1934;
+    --bg-terciary: #463977;
+    --bg-success: #075f00;
+		--text-color: #bfc2c7;
+		--bg-shadow-1: rgba(45, 35, 66, 0.4);
+	}
   * {
     font-family: 'Courier New', Courier, monospace;
     font-weight: 700;
