@@ -1,13 +1,16 @@
 <script lang="ts">
-	import type Timer from './runes/Timer.svelte';
+  import type Interval from './runes/Interval.svelte';
+  import type Timer from './runes/Timer.svelte';
+  import ReverseButton from '$lib/ReverseButton.svelte';
 
   const { timer }: { timer: Timer } = $props();
-  
+  let reverse = $state(true);
   
   interface Segment {
     color: string;
     offset: number,
     angle: number,
+    angleLength: number,
     speed: number,
     px: number,
     py: number,
@@ -25,6 +28,26 @@
     }
   }
 
+  const getSegmentDetails = (interval: Interval, offset: number) => {
+      const progress = interval.elapsedSeconds / interval.totalSeconds
+      const angle = (((interval.totalSeconds / timer.totalSeconds * 100) * progress) * 360 / 100)
+      // console.log('angle', angle, interval.totalSeconds, timer.totalSeconds, progress)
+      const speed = interval.running ? interval.tickRate / 1000 : 0
+      const angleLength = (interval.totalSeconds/timer.totalSeconds * 360);
+      const {x, y} = getPosition(angleLength + offset - (angleLength / 2));
+
+      return {
+        progress,
+        angleLength,
+        angle,
+        speed,
+        px: x,
+        py: y,
+      }
+  }
+
+
+
 	$effect(() => {
     if (segments.size > timer.intervals.length) {
       segments.clear()
@@ -32,22 +55,18 @@
 
     let offset = 0;
     for(let interval of timer.intervals) {
-      const progress = interval.elapsedSeconds / interval.totalSeconds
-      const angle = (((interval.totalSeconds / timer.totalSeconds * 100) * progress) * 360 / 100)
-      // console.log('angle', angle, interval.totalSeconds, timer.totalSeconds, progress)
-      const speed = interval.running ? interval.tickRate / 1000 : 0
-      const angleLength = (interval.totalSeconds/timer.totalSeconds * 360);
-      const {x:px, y:py} = getPosition(angleLength + offset - (angleLength / 2))
+      const { angle, angleLength, speed, px, py } = getSegmentDetails(interval, offset)
 
       segments.set(interval.id, {
         color: interval.color,
-        offset,
         angle,
+        angleLength,
         speed,
         px,
         py,
+        offset,
       })
-      offset += angle 
+      offset += angleLength
     }
 
     segmentsToDisplay = [...segments.entries()].reduce<Segment[]>((p, [k, s]) => {
@@ -56,15 +75,24 @@
     }, [])
   })
 
+  const onReverse = () => {
+    reverse = !reverse
+  }
 </script>
 
-<div class='container'>
-  {#each segmentsToDisplay as segment}
-    <div class="conic-effect" style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
-  {/each}
-  <div class="timer">
-    <div class="top">{timer.display || "00:00"}</div>
-    <span class="sub">.{Math.round(timer.elapsedSeconds % 1 * 1000).toString().padStart(3, "0")}</span>
+<div class="main">
+  <div class='container'>
+    {#each segmentsToDisplay as segment}
+      <div class="conic-effect" class:reverse={reverse} style={`--px:${segment.px}%;--py:${segment.py}%;--speed:${segment.speed}s;--angle:${segment.angle}deg;--angleLength:${segment.angleLength}deg;--color:${segment.color};--offset:${segment.offset}deg`}></div>
+    {/each}
+    <div class="timer">
+      <div class="top">{timer.display || "00:00"}</div>
+      <span class="sub">.{Math.round(timer.elapsedSeconds % 1 * 1000).toString().padStart(3, "0")}</span>
+    </div>
+  </div>
+  <div class="reverse">
+    <span>Reverse?</span>
+    <ReverseButton ontoggle={onReverse} />
   </div>
 </div>
 
@@ -76,6 +104,18 @@
   initial-value: 0deg;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reverse {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .container {
   position: relative;
   margin-bottom: 20px;
@@ -93,13 +133,22 @@
   left: 50%;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  --color: hsl(31, 94%, 61%);
   background: conic-gradient(from var(--offset) at var(--px) var(--py),
     var(--color) var(--angle),
     transparent calc(var(--angle))
   );
   transition: --angle var(--speed) linear;
 }
+
+.conic-effect.reverse {
+  background: conic-gradient(from 0 at var(--px) var(--py),
+    transparent calc(var(--angle) + var(--offset)),
+    var(--color) calc(var(--angle) + var(--offset)),
+    var(--color) calc(var(--angleLength) + var(--offset)),
+    transparent var(--angleLength)
+  );
+}
+
 .timer {
   position: absolute;
   display: flex;
