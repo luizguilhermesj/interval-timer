@@ -12,7 +12,7 @@
 
 	function handleSort(e: {detail: { items: Interval[] }}) {
 		timer.intervals = e.detail.items;
-	} 
+	}
 
   $effect(() => {
     dragDisabled = timer.getCurrentInterval()?.running || Object.values(isOpen).some(el => el)
@@ -82,6 +82,12 @@
     transition: background-color .3s;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   }
+
+	:global(html.dark-mode) .interval {
+		background-color: #1f1934;
+    box-shadow: rgba(114, 114, 212, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	}
+
   .interval.finished {
     background-color: #daffd7;
   }

@@ -1,6 +1,7 @@
 
 <script lang="ts">
   import { Clock, Interval, Timer, Button, IntervalDisplay, Analytics } from '$lib'
+  import DarkModeButton from '$lib/DarkModeButton.svelte';
 
   let audio: HTMLAudioElement;
 
@@ -43,6 +44,20 @@
     addInterval()
   }
 </script>
+<head:script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</head:script>
+<header>
+  <DarkModeButton />
+  <a
+    class="github-button"
+    href="https://github.com/luizguilhermesj"
+    data-color-scheme="no-preference: light; light: light; dark: dark;"
+    data-size="large"
+    aria-label="Follow @luizguilhermesj on GitHub">
+      GitHub
+  </a>
+</header>
 <div class="main">
   <div>
     <div class="form inputs">
@@ -63,11 +78,21 @@
 <Analytics />
 <style>
   * {
-    font-family:'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
     font-weight: 700;
     font-size: 18px;
   }
 
+	:global(html),
+  :global(html.dark-mode)  {
+		background-color: var(--bg-color);
+		color: var(--text-color);
+	}
+
+  header {
+    display: flex;
+    justify-content: space-around;
+  }
   .main {
     display: flex;
     align-items: flex-end;
@@ -95,6 +120,20 @@
 
   .form input:focus{
     box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  }           
-                
+  }
+
+	:global(html.dark-mode) .form input  {
+		background-color: #36395a;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#4c507e 0 -3px 0 inset;
+		color: #bfc2c7;
+	}
+
+	:global(html.dark-mode) .form input  {
+		background-color: #36395a;
+		color: #bfc2c7;
+	}
+
+  :global(html.dark-mode) .form input:focus{
+    box-shadow: #4c507e 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #4c507e 0 -3px 0 inset;
+  }
 </style>
