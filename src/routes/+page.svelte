@@ -51,7 +51,7 @@
   <DarkModeButton />
   <a
     class="github-button"
-    href="https://github.com/luizguilhermesj"
+    href="https://github.com/luizguilhermesj/interval-timer"
     data-color-scheme="no-preference: light; light: light; dark: dark;"
     data-size="large"
     aria-label="Follow @luizguilhermesj on GitHub">
