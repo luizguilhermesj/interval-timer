@@ -89,10 +89,12 @@
     box-sizing: border-box;
     overflow: hidden !important;
     text-overflow: ellipsis;
+    border: 1px solid transparent;
+    transition: all .3s;
   }
 
   .label input:focus {
-    border: 1px solid black;
+    border-bottom: 1px solid var(--text-color);
   }
 
   .display {
