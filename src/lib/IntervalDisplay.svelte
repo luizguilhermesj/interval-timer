@@ -53,14 +53,16 @@
               }}
             />
           </button>
-          <div>{interval.display}</div>
+          <div class="label">
+            <input onchange={(e) => interval.label = e.currentTarget.value} value={interval.label} />
+          </div>
+          <div class="display">{interval.display}</div>
           <DeleteButton onclick={() => timer.removeInterval(interval)} />
       </li>
   {/each}
 </ul>
 
 <style>
-  li { display: block;}
   .color-picker {
     border: none;
     background: none;
@@ -68,6 +70,35 @@
     margin: 0;
   }
 
+  .label {
+    padding: 0 10px;
+    outline: none;
+  }
+
+  .label input {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 0 4px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    box-sizing: border-box;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+
+  .label input:focus {
+    border: 1px solid black;
+  }
+
+  .display {
+    align-self: center;
+    margin-right: 4px;
+  }
   .intervals {
     width: 300px;
     padding: 0;
@@ -81,9 +112,9 @@
     padding: 10px;
     border-radius: 8px;
     justify-content: space-between;
-    align-items: center;
     transition: background-color .3s;
     box-shadow: var(--box-shadow-1);
+    align-items: stretch;
   }
 
 

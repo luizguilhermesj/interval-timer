@@ -19,8 +19,8 @@
   }
 
   const timer = new Timer([
-    new Interval(getColor(), 0, 1),
-    new Interval(getColor(), 0, 1),
+    new Interval('Interval 1', getColor(), 0, 1),
+    new Interval('Interval 2', getColor(), 0, 1),
   ])
 
   timer.intervalFinished(() => {
@@ -32,11 +32,12 @@
     }, 280)
   })
 
+  let label = 'New Interval';
   let minutes = 0;
   let seconds = 0;
   const addInterval = () => {
     if (!minutes && !seconds) return
-    timer.addInterval(new Interval(getColor(), minutes, seconds));
+    timer.addInterval(new Interval(label, getColor(), minutes, seconds));
   }
 
   const handleKeyPress = (e:KeyboardEvent) => {

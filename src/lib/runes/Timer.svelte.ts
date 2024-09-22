@@ -3,6 +3,7 @@ import { browser } from "$app/environment"
 
 class IntervalStoreItem {
     constructor(
+        public label: string,
         public color: string,
         public minutes: number,
         public seconds: number,
@@ -26,7 +27,7 @@ export default class Timer {
             this.store = JSON.parse(localStorage.getItem('intervals') || '[]')
             if (this.store.length) {
                 for (let value of this.store) {
-                    this.addInterval(new Interval(value.color, value.minutes, value.seconds, value.id))
+                    this.addInterval(new Interval(value.label || 'Interval', value.color, value.minutes, value.seconds, value.id))
                 }
             } else {
                 defaultIntervals.map(this.addInterval.bind(this))
@@ -110,7 +111,7 @@ export default class Timer {
 
         this.store = []
         for (let interval of this.intervals) {
-            this.store.push(new IntervalStoreItem(interval.color, interval.minutes, interval.seconds, interval.id))
+            this.store.push(new IntervalStoreItem(interval.label, interval.color, interval.minutes, interval.seconds, interval.id))
         }
 
         localStorage.setItem('intervals', JSON.stringify(this.store))
@@ -124,11 +125,6 @@ export default class Timer {
         let { minutes, seconds } = this.getCurrentInterval().convertSecondsToTime(this.totalSeconds - this.elapsedSeconds)
         this.display = `${this.pad(minutes)}:${this.pad(Math.floor(seconds))}`
     }
-
-    // private setNextInterval() {
-    //     this.elapsedSeconds = 0
-    //     this.currentInterval = this.intervals[++this.currentIntervalIndex]
-    // }
 
     private pad(el: number): string {
         return el.toString().padStart(2, "0")
