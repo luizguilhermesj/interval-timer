@@ -9,10 +9,10 @@
 .button {
   align-items: center;
   appearance: none;
-  background-color: #FCFCFD;
+  background-color: var(--bg-button);
   border-radius: 4px;
   border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+  box-shadow: var(--box-shadow-1);
   box-sizing: border-box;
   color: #36395A;
   cursor: pointer;
@@ -37,7 +37,6 @@
 }
 
 :global(html.dark-mode) .button {
-  background-color: #36395a;
   color: #FCFCFD;
   box-shadow: rgba(174, 136, 255, 0.4) 0 2px 4px,rgba(169, 132, 250, 0.3) 0 7px 13px -3px,#4c507e 0 -3px 0 inset;
 }

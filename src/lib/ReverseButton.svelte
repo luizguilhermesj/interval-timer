@@ -1,5 +1,16 @@
 <script lang="ts">
-    let { ontoggle } : { ontoggle: Function } = $props()
+	import { browser } from '$app/environment';
+    let { reverse = $bindable(true) } : { reverse: boolean } = $props()
+
+  if (browser) {
+    reverse = localStorage.getItem('reverse') == 'true'
+  }
+
+  const onchange = () => {
+    reverse = !reverse
+
+    localStorage.setItem('reverse', reverse.toString())
+  }
 
 </script>
 
@@ -9,7 +20,7 @@
 </div> -->
 <div class="toggle-button-cover">
   <div id="button-3" class="button r">
-    <input class="checkbox" type="checkbox"  onchange={() => ontoggle()}>
+    <input class="checkbox" type="checkbox" checked={!reverse} {onchange}>
     <div class="knobs"></div>
     <div class="layer"></div>
   </div>
@@ -27,6 +38,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  background-color: var(--bg-secondary);
 }
 
 .button {
@@ -35,6 +47,7 @@
   width: 74px;
   height: 36px;
   overflow: hidden;
+  box-shadow: var(--box-shadow-2);
 }
 
 .checkbox {
@@ -54,7 +67,6 @@
 
 .layer {
   width: 100%;
-  background-color: #ebf7fc;
   transition: 0.3s ease all;
   z-index: 1;
 }

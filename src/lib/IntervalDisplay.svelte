@@ -4,6 +4,7 @@
 	import {dndzone} from 'svelte-dnd-action';
 	import {flip} from 'svelte/animate';
 	import ColorPicker from 'svelte-awesome-color-picker';
+	import DeleteButton from './DeleteButton.svelte';
   
 	const flipDurationMs = 200;
   const { timer }: { timer: Timer } = $props();
@@ -53,7 +54,7 @@
             />
           </button>
           <div>{interval.display}</div>
-          <Button onclick={() => timer.removeInterval(interval)}>remove</Button>
+          <DeleteButton onclick={() => timer.removeInterval(interval)} />
       </li>
   {/each}
 </ul>
@@ -63,6 +64,8 @@
   .color-picker {
     border: none;
     background: none;
+    padding: 0;
+    margin: 0;
   }
 
   .intervals {
@@ -80,12 +83,9 @@
     justify-content: space-between;
     align-items: center;
     transition: background-color .3s;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    box-shadow: var(--box-shadow-1);
   }
 
-	:global(html.dark-mode) .interval {
-    box-shadow: rgba(114, 114, 212, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-	}
 
   .interval.finished {
     background-color: var(--bg-success);

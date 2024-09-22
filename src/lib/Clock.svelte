@@ -46,8 +46,6 @@
       }
   }
 
-
-
 	$effect(() => {
     if (segments.size > timer.intervals.length) {
       segments.clear()
@@ -75,9 +73,6 @@
     }, [])
   })
 
-  const onReverse = () => {
-    reverse = !reverse
-  }
 </script>
 
 <div class="main">
@@ -92,7 +87,7 @@
   </div>
   <div class="reverse">
     <span>Reverse?</span>
-    <ReverseButton ontoggle={onReverse} />
+    <ReverseButton bind:reverse={reverse} />
   </div>
 </div>
 
@@ -123,7 +118,7 @@
   width: 300px;
   min-width: 300px;
   border-radius: 50%;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: var(--box-shadow-2);
 }
 .conic-effect {
   height: 300px;

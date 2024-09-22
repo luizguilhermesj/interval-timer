@@ -81,18 +81,22 @@
 		--bg-color: #eeeeee;
 		--bg-secondary: white;
     --bg-terciary: #fffeb1;
+    --bg-button: #ffffff;
     --bg-success: #daffd7;
 		--text-color: #000000;
-		--bg-shadow-1: rgba(45, 35, 66, 0.4);
+    --box-shadow-1: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+		--box-shadow-2: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
 
 	:global(html.dark-mode) {
 		--bg-color: #1d3040;
 		--bg-secondary: #1f1934;
     --bg-terciary: #463977;
+    --bg-button: #36395a;
     --bg-success: #075f00;
 		--text-color: #bfc2c7;
-		--bg-shadow-1: rgba(45, 35, 66, 0.4);
+    --box-shadow-1: #4c507e 0 0 0 1.5px inset, rgba(174, 136, 255, 0.4) 0 2px 4px,rgba(169, 132, 250, 0.3) 0 7px 13px -3px,#4c507e 0 -3px 0 inset;
+		--box-shadow-2: rgba(255, 255, 255, 0.35) 0px 0px 10px;
 	}
   * {
     font-family: 'Courier New', Courier, monospace;
@@ -129,10 +133,11 @@
     text-align: center;
     border: 0;
     outline: 0;
-    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-shadow: var(--box-shadow-1);
     border-radius: 4px;
     font-size: 18px;
     padding: 4px 8px;
+    background-color: var(--bg-button);
   }
 
   .form input:focus{
@@ -140,13 +145,11 @@
   }
 
 	:global(html.dark-mode) .form input  {
-		background-color: #36395a;
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#4c507e 0 -3px 0 inset;
 		color: #bfc2c7;
 	}
 
 	:global(html.dark-mode) .form input  {
-		background-color: #36395a;
 		color: #bfc2c7;
 	}
 
